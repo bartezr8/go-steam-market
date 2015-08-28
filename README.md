@@ -24,6 +24,9 @@ func main() {
         fmt.Println(jsonResp)
 }
 
+// Response:
+{true $88.69 39 $80.95}
+
 ```
 
 The function takes 5 parameters:
