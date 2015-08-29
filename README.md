@@ -22,6 +22,14 @@ import (
 func main() {
         jsonResp := gosm.GetSinglePrice(false, "M4A1-S", "Master Piece", gosm.FT, "G")
         fmt.Println(jsonResp)
+
+        // Or
+
+        jsonResp, _ := gosm.GetAssetInfo(key, appid, class_count, classid, instanceid)
+        for k, v := range jsonResp.Assets {
+                fmt.Println(v.Name) // Chroma Case
+                fmt.Println(v.GetPrice()) // &{true $0.03 72,028 $0.03}
+        }
 }
 
 // Response:
