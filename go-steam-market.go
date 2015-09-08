@@ -3,6 +3,7 @@ package gosm
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 	"net/url"
@@ -75,8 +76,12 @@ type Tag struct {
 	CategoryName string `json:"category_name"`
 }
 
-func (a *Asset) GetPrice() *AssetPrice {
-	resp, err := GetSinglePricePrepped(a.MarketHashName)
+func (a *Asset) GetPrice(appid uint64) *AssetPrice {
+	var name string = a.MarketHashName
+	if a.MarketHashName == "" {
+		name = a.MarketName
+	}
+	resp, err := GetSinglePricePrepped(name, appid)
 	if err != nil {
 		panic(err)
 	}
@@ -147,7 +152,7 @@ func GetSinglePrice(stattrak bool, wep, skin, wear, item string) *AssetPrice {
 
 }
 
-func GetSinglePricePrepped(name string) (*AssetPrice, error) {
+func GetSinglePricePrepped(name string, appid uint64) (*AssetPrice, error) {
 	var Url *url.URL
 
 	Url, err := url.Parse(baseUrl + "/market/priceoverview")
@@ -157,7 +162,7 @@ func GetSinglePricePrepped(name string) (*AssetPrice, error) {
 
 	parameters := url.Values{}
 	parameters.Add("currency", Currency)
-	parameters.Add("appid", AppId)
+	parameters.Add("appid", fmt.Sprintf("%v", appid))
 	parameters.Add("market_hash_name", name)
 	Url.RawQuery = parameters.Encode()
 
